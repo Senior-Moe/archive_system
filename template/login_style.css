@@ -1,0 +1,33 @@
+* {
+    font-family: 'Noto Naskh Arabic', serif;
+}
+.body_login{
+    background-image: url("/images/viktor-talashuk-05HLFQu8bFw-unsplash.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.form_login {
+    width: 50%;
+    border: 1px solid #05177d;
+    padding: 5%;
+    margin: 50% auto;
+    background: #fff;
+    border-radius: 0px 19px;
+    box-shadow: 12px 12px 2px 1px #00c999
+}
+
+h2 {
+text-align: center;
+margin-bottom: 40px;
+}
+
+img {
+    position: absolute;
+    margin-top: -20%;
+    margin-right: 20%;
+}
