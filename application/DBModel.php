@@ -46,7 +46,7 @@ class DBModel {
   }
 
   public function get_connection(){
-    $dsn = "mysql:host=localhost;dbname=wftutorials";
+    $dsn = "mysql:host=localhost;dbname=archive_system";
     $user = "root";
     $passwd = "Mummy4321";
     $conn = new PDO($dsn, $user, $passwd);

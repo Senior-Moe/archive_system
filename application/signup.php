@@ -46,8 +46,8 @@ if(isset($_POST['first_name']) && isset($_POST['user_email']) && isset($_POST['s
                 $stmt->execute();
                 $stmt->close();
                 $connection->close();
-                exit();
                 header("Location: ../pages/register.php?status=تم التسجيل بنجاح");
+                exit();
                 }
     }
 }else{

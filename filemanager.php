@@ -1,10 +1,11 @@
 <?php
 session_start();
+$title="Archive_System";
 if(isset($_SESSION['username'])){
 include "application/DBModel.php";
 $currentFolder = null;
 
-define("WEBSITE_BASE_PATH","http://192.168.100.26/");
+define("WEBSITE_BASE_PATH","http://192.168.138.68/");
 
 
 function get_random_name($num = 6){
@@ -232,24 +233,7 @@ if($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['action']) && $_GET['actio
 }
 
 
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>نظام الأرشفة</title>
-</head>
-<style>
-  table {
-    width: 100%;
-  }
-  table, th, td {
-  border-collapse: collapse;
-  border: 2px solid;
-  }
-
-</style>
-<body dir="rtl">
+include("template/header.php");?>
 <h1>مدير الملفات</h1>
 <p>إضافة ملف</p>
 <form method="post" enctype="multipart/form-data">
@@ -259,15 +243,16 @@ if($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['action']) && $_GET['actio
 </form>
 
 <br><br>
-<h2><a href="<?Php echo create_url("filemanager.php");?>">Files and Folders</a> <?php echo get_current_folder_name();?></h2>
+<h2><a href="<?Php echo create_url("filemanager.php");?>">الأرشيف</a> <?php echo get_current_folder_name();?></h2>
 
 <table>
   <thead>
     <tr>
-      <td><strong>Name</strong></td>
-      <td><strong>Date</strong></td>
-      <td><strong>Type</strong></td>
-      <td><strong>Size</strong></td>
+      <td><strong>الإسم</strong></td>
+      <td><strong>التاريخ</strong></td>
+      <td><strong>النوع</strong></td>
+      <td><strong>الحجم</strong></td>
+      <td><strong>التنفيذ</strong></td>
     </tr>
   </thead>
   <tbody>
@@ -297,6 +282,12 @@ if($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['action']) && $_GET['actio
               <td><?php  echo $fObject["createdOn"];?></td>
               <td><?php  echo $fObject["file_type"];?></td>
               <td><?php  echo $fObject["file_size"];?></td>
+              <td>
+                 <form action="delete.php" method="post">
+                       <input type="hidden" name="deleteit" value="<?php echo $fObject['id']; ?>">
+                       <button name="delete_button" type="button">حذف</button>
+                </form>
+             </td>
           </tr>
       <?php endforeach; ?>
   </tbody>
@@ -350,44 +341,43 @@ if($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['action']) && $_GET['actio
           '</form>',
         buttons: {
           formSubmit: {
-            text: 'Submit',
-            btnClass: 'btn-blue',
-            action: function () {
-              var name = this.$content.find('.name').val();
-              if(!name){
-                $.alert('provide a valid name');
-                return false;
-              }else{
-                formAction += "&name=" + name;
-                window.location.href = formAction;
-              }
+                      text: 'Submit',
+       btnClass: 'btn-blue',
+       action: function () {
+           var name = this.$content.find('.name').val();
+           if(!name){
+               $.alert('provide a valid name');
+               return false;
+           }else{
+               formAction += "&name=" + name;
+               window.location.href = formAction;
+           }
+       }
+       },
+       cancel: function () {
+           //close
+       },
+       },
+       });
+    }
+
+        function deleteItem(item, itemtype){
+            if(confirm("Are you sure you want to delete this item")){
+                if(IS_DIRECTORY){
+                    var deleteAction = CURRENT_BASE_PATH + "&type="+itemtype+"&item="+item+'&action=delete';
+                }else{
+                    var deleteAction = CURRENT_BASE_PATH + "?type="+itemtype+"&item=" + item+'&action=delete';
+                }
+                window.location.href = deleteAction;
             }
-          },
-          cancel: function () {
-            //close
-          },
-        },
-      });
-    }
-
-    function deleteItem(item, itemtype){
-      if(confirm("Are you sure you want to delete this item")){
-        if(IS_DIRECTORY){
-          var deleteAction = CURRENT_BASE_PATH + "&type="+itemtype+"&item="+item+'&action=delete';
-        }else{
-          var deleteAction = CURRENT_BASE_PATH + "?type="+itemtype+"&item=" + item+'&action=delete';
         }
-        window.location.href = deleteAction;
-      }
-    }
 
-  });
-</script>
+        });
+  </script>
 
-</body>
-</html>
-
-<?php }else {
+<?php
+      include("template/footer.php");
+      }else {
 header("Location: index.php");
 exit();
   }?>
